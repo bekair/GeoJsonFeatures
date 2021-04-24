@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model OpenStreetMapViewModel
+
+<form id="searchGeoJson" asp-action="Index" asp-controller="Home" method="post">
+    <partial name="_ToastrPartial" for="ToastrViewModel" />
+
+    <div class="container text-center box-shadow large-box">
+        <div class="row">
+            <div class="offset-2 col-8 card-header">
+                <img src="~/images/world.jpg" alt="GeoJson World Image"
+                     width="120" height="120" style="border-radius: 50%"
+                     class="animation-360-degree-cycle" />
+                <label class="display-4">Search GeoJson Features</label>
+            </div>
+            <br /><br />
+
+            <div class="offset-2 col-8 card-body">
+                <div class="mb-3 row">
+                    <label asp-for="MinimumLongitude" class="col-sm-5 col-form-label"></label>
+                    <div class="col-sm-7">
+                        <input asp-for="MinimumLongitude" type="text" class="form-control">
+                        <span asp-validation-for="MinimumLongitude" class="text-danger h6"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="MinimumLatitude" class="col-sm-5 col-form-label"></label>
+                    <div class="col-sm-7">
+                        <input asp-for="MinimumLatitude" type="text" class="form-control">
+                        <span asp-validation-for="MinimumLatitude" class="text-danger h6"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="MaximumLongitude" class="col-sm-5 col-form-label"></label>
+                    <div class="col-sm-7">
+                        <input asp-for="MaximumLongitude" type="text" class="form-control">
+                        <span asp-validation-for="MaximumLongitude" class="text-danger h6"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label asp-for="MaximumLatitude" class="col-sm-5 col-form-label"></label>
+                    <div class="col-sm-7">
+                        <input asp-for="MaximumLatitude" type="text" class="form-control">
+                        <span asp-validation-for="MaximumLatitude" class="text-danger h6 text-sm-left"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-7">
+                        <input type="submit" class="btn btn-block btn-primary" value="Search" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @*@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }*@
+
+<script>
+
+        $('#searchGeoJson').submit(function (event) {
+            debugger;
+            event.preventDefault();
+            event.stopPropagation();
+
+            var form = $('#searchGeoJson');
+
+            //form.validate();
+            //if (!form.valid()) {
+            //    return false;
+            //}
+
+            $.ajax({
+                url: `/Home/SearchGeoJsonFeaturesByCoordinates`,
+                type: "POST",
+                dataType: "json",
+                data: form.serialize(),
+                success: function (data) {
+                    debugger;
+                    removeAllValidations();
+
+                    var result = data.responseJSON;
+                },
+                error: function (data) {
+                    var toastrErrorField = $('#@Html.IdFor(m => m.ToastrViewModel.ErrorMessage)');
+
+                    //Server exception
+                    if (data.status === 500) {
+                        toastrErrorField.html('A system error occured. Please keep in touch with your system admin.');
+                    }
+                    else {
+                        toastrErrorField.html(data.responseJSON.toastrViewModel.errorMessage);
+                    }
+                    $('.toast').toast('show');
+                }
+            });
+        });
+
+</script>
+}

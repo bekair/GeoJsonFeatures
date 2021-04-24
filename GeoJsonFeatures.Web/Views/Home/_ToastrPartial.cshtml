@@ -1,0 +1,15 @@
+﻿@model ToastrViewModel
+
+<div data-animation="true" data-delay="4000" class="toast fade hide toast-custom">
+    <div class="toast-header toast-header-custom">
+        <i style="color:white" class="fa fa-2x fa-times-circle-o rounded mr-2" aria-hidden="true"></i>
+        <strong class="mr-auto text-white"><b>Error</b></strong>
+        <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        <label id="@Html.IdFor(m => m.ErrorMessage)" name="@Html.NameFor(m => m.ErrorMessage)">
+        </label>
+    </div>
+</div>
