@@ -51,14 +51,7 @@ html {
 .large-box {
     border-radius: 15px;
     min-height: 550px;
-    padding: 30px 20px 30px 20px;
-}
-
-.small-box {
-    border-radius: 15px;
-    min-height: 300px;
-    margin: 30px 60px 30px 60px;
-    padding: 20px;
+    padding: 30px 40px 30px 40px;
 }
 
 .animation-360-degree-cycle {

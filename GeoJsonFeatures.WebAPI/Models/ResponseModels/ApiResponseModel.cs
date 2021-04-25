@@ -18,12 +18,6 @@ namespace GeoJsonFeatures.WebAPI.Models.ResponseModels
         public HttpStatusCode StatusCode { get; set; }
 
         [DataMember]
-        public string ContentType { get; set; }
-
-        [DataMember]
-        public bool IsSuccessfull { get; set; }
-
-        [DataMember]
         public string Message { get; set; }
     }
 }

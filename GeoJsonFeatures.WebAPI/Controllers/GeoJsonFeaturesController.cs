@@ -28,24 +28,18 @@ namespace GeoJsonFeatures.WebAPI.Controllers
             string url = $"{client.BaseAddress}map?bbox={boundingBox.MinimumLongitude},{boundingBox.MinimumLatitude},{boundingBox.MaximumLongitude},{boundingBox.MaximumLatitude}";
 
             using HttpResponseMessage responseMessage = await client.GetAsync(url);
-
             ContentResult result = Content(await responseMessage.Content.ReadAsStringAsync(), "text/xml");
-            ApiResponseModel<XDocument> response = new()
+            
+            return (ApiResponseModel<XDocument>)(new()
             {
-                IsSuccessfull = true,
                 StatusCode = responseMessage.StatusCode,
-                Result = XDocument.Parse(result.Content),
-                ContentType = result.ContentType
-            };
-
-            if (!responseMessage.IsSuccessStatusCode)
-            {
-                response.IsSuccessfull = false;
-                response.Message = result.Content;
-                response.Result = null;
-            }
-
-            return response;
+                Result = responseMessage.IsSuccessStatusCode
+                                ? XDocument.Parse(result.Content)
+                                : null,
+                Message = responseMessage.IsSuccessStatusCode
+                                ? null
+                                : result.Content
+            });
         }
     }
 }

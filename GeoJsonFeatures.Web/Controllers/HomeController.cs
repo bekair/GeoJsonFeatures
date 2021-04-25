@@ -32,6 +32,7 @@ namespace GeoJsonFeatures.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> SearchGeoJsonFeaturesByCoordinates(OpenStreetMapViewModel openStreetMapViewModel)
         {
+            OsmApiResponseModel osmApiResponseModel = new();
             if (ModelState.IsValid)
             {
                 HttpClient client = _httpClientFactory.CreateClient(_config["MapApiName"]);
@@ -46,21 +47,27 @@ namespace GeoJsonFeatures.Web.Controllers
                 using HttpResponseMessage response = await client.SendAsync(request);
                 ContentResult responseResult = Content(await response.Content.ReadAsStringAsync(), "text/xml");
 
-                openStreetMapViewModel.OsmApiResponseModel = JsonConvert.DeserializeObject<OsmApiResponseModel>(responseResult.Content);
+                osmApiResponseModel = JsonConvert.DeserializeObject<OsmApiResponseModel>(responseResult.Content);
 
-                if (openStreetMapViewModel.OsmApiResponseModel.StatusCode != HttpStatusCode.OK)
+                if (osmApiResponseModel.StatusCode != HttpStatusCode.OK)
                 {
-                    openStreetMapViewModel.ToastrViewModel.ErrorMessage = openStreetMapViewModel.OsmApiResponseModel.Message;
-                    HttpContext.Response.StatusCode = (int)openStreetMapViewModel.OsmApiResponseModel.StatusCode;
+                    HttpContext.Response.StatusCode = (int)osmApiResponseModel.StatusCode;
+
+                    return Json(osmApiResponseModel);
                 }
             }
             else
             {
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                openStreetMapViewModel.ToastrViewModel.ErrorMessage = string.Join("<br/>", ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList());
+                osmApiResponseModel.Message = string.Join("<br/>",
+                                                         ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                                                                          .ToList()
+                                              );
+
+                return Json(osmApiResponseModel);
             }
 
-            return Json(openStreetMapViewModel);
+            return Json(osmApiResponseModel.Result.ToString());
         }
     }
 }

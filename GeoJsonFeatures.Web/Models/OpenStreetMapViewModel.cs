@@ -1,5 +1,4 @@
-﻿using GeoJsonFeatures.Web.Models.ResponseModels;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace GeoJsonFeatures.Web.Models
@@ -32,7 +31,5 @@ namespace GeoJsonFeatures.Web.Models
         public double? MaximumLatitude { get; set; }
 
         public ToastrViewModel ToastrViewModel { get; set; }
-
-        public OsmApiResponseModel OsmApiResponseModel { get; set; }
     }
 }
