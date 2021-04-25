@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace GeoJsonFeatures.WebAPI.Controllers
 {
@@ -21,23 +22,26 @@ namespace GeoJsonFeatures.WebAPI.Controllers
         }
 
         [HttpGet("GetOsmDataByBbox")]
-        public async Task<ApiResponseModel<string>> GetOsmDataByBbox([FromBody] BoundingBox boundingBox)
+        public async Task<ApiResponseModel<XDocument>> GetOsmDataByBbox([FromBody] BoundingBox boundingBox)
         {
-            ApiResponseModel<string> response = new();
-
             HttpClient client = _httpClientFactory.CreateClient(_config["MapApiName"]);
             string url = $"{client.BaseAddress}map?bbox={boundingBox.MinimumLongitude},{boundingBox.MinimumLatitude},{boundingBox.MaximumLongitude},{boundingBox.MaximumLatitude}";
 
             using HttpResponseMessage responseMessage = await client.GetAsync(url);
 
             ContentResult result = Content(await responseMessage.Content.ReadAsStringAsync(), "text/xml");
-            response.StatusCode = responseMessage.StatusCode;
-            response.Result = result.Content;
-            response.ContentType = result.ContentType;
+            ApiResponseModel<XDocument> response = new()
+            {
+                IsSuccessfull = true,
+                StatusCode = responseMessage.StatusCode,
+                Result = XDocument.Parse(result.Content),
+                ContentType = result.ContentType
+            };
+
             if (!responseMessage.IsSuccessStatusCode)
             {
                 response.IsSuccessfull = false;
-                response.Message = response.Result;
+                response.Message = result.Content;
                 response.Result = null;
             }
 

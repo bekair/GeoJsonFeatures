@@ -2,12 +2,12 @@
 using GeoJsonFeatures.Web.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GeoJsonFeatures.Web.Controllers
@@ -40,16 +40,13 @@ namespace GeoJsonFeatures.Web.Controllers
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri(url),
-                    Content = new StringContent(JsonSerializer.Serialize(openStreetMapViewModel), Encoding.UTF8, "application/json")
+                    Content = new StringContent(JsonConvert.SerializeObject(openStreetMapViewModel), Encoding.UTF8, "application/json")
                 };
 
                 using HttpResponseMessage response = await client.SendAsync(request);
                 ContentResult responseResult = Content(await response.Content.ReadAsStringAsync(), "text/xml");
 
-                openStreetMapViewModel.OsmApiResponseModel = JsonSerializer.Deserialize<OsmApiResponseModel>(
-                    responseResult.Content,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                );
+                openStreetMapViewModel.OsmApiResponseModel = JsonConvert.DeserializeObject<OsmApiResponseModel>(responseResult.Content);
 
                 if (openStreetMapViewModel.OsmApiResponseModel.StatusCode != HttpStatusCode.OK)
                 {

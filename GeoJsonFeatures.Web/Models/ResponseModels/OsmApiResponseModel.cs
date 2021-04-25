@@ -1,10 +1,11 @@
 ﻿using System.Net;
+using System.Xml.Linq;
 
 namespace GeoJsonFeatures.Web.Models.ResponseModels
 {
     public class OsmApiResponseModel
     {
-        public string Result { get; set; }
+        public XDocument Result { get; set; }
 
         public bool IsSuccessfull { get; set; }
 

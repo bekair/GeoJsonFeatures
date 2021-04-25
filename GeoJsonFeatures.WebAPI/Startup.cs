@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http.Headers;
+using System.Xml;
 
 namespace GeoJsonFeatures.WebAPI
 {
@@ -21,13 +23,15 @@ namespace GeoJsonFeatures.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddMvc(options => options.OutputFormatters.Add(new XmlSerializerOutputFormatter()));
+            services.AddControllers()
+                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize)
+                    .AddXmlSerializerFormatters();
+
             services.AddHttpClient(Configuration["MapApiName"], options =>
             {
                 options.BaseAddress = new Uri(Configuration["OpenStreetMapBaseAddress"]);
                 options.DefaultRequestHeaders.Accept.Clear();
-                options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
             });
         }
 

@@ -6,9 +6,9 @@ namespace GeoJsonFeatures.WebAPI.Models.ResponseModels
     [DataContract]
     public class ApiResponseModel<T>
     {
+        //For serialization
         public ApiResponseModel()
         {
-            IsSuccessfull = true;
         }
 
         [DataMember]

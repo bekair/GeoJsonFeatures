@@ -61,47 +61,49 @@
 </form>
 
 @section Scripts {
-    @*@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }*@
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-<script>
+    <script>
 
-        $('#searchGeoJson').submit(function (event) {
-            debugger;
-            event.preventDefault();
-            event.stopPropagation();
+        $(document).ready(function () {
 
-            var form = $('#searchGeoJson');
+            $('#searchGeoJson').submit(function (event) {
+                event.preventDefault();
+                event.stopPropagation();
 
-            //form.validate();
-            //if (!form.valid()) {
-            //    return false;
-            //}
+                var form = $('#searchGeoJson');
 
-            $.ajax({
-                url: `/Home/SearchGeoJsonFeaturesByCoordinates`,
-                type: "POST",
-                dataType: "json",
-                data: form.serialize(),
-                success: function (data) {
-                    debugger;
-                    removeAllValidations();
-
-                    var result = data.responseJSON;
-                },
-                error: function (data) {
-                    var toastrErrorField = $('#@Html.IdFor(m => m.ToastrViewModel.ErrorMessage)');
-
-                    //Server exception
-                    if (data.status === 500) {
-                        toastrErrorField.html('A system error occured. Please keep in touch with your system admin.');
-                    }
-                    else {
-                        toastrErrorField.html(data.responseJSON.toastrViewModel.errorMessage);
-                    }
-                    $('.toast').toast('show');
+                if (!form.valid()) {
+                    return false;
                 }
+
+                $.ajax({
+                    url: `/Home/SearchGeoJsonFeaturesByCoordinates`,
+                    type: "POST",
+                    dataType: "json",
+                    data: form.serialize(),
+                    success: function (data) {
+                        removeAllValidations();
+                        debugger;
+                        
+                        var osmData = data.osmApiResponseModel.result.osm;
+                        var geoJsonData = osmtogeojson(osmData);
+                    },
+                    error: function (data) {
+                        var toastrErrorField = $('#@Html.IdFor(m => m.ToastrViewModel.ErrorMessage)');
+
+                        //Server exception
+                        if (data.status === 500) {
+                            toastrErrorField.html('A system error occured. Please contact the system admin.');
+                        }
+                        else {
+                            toastrErrorField.html(data.responseJSON.toastrViewModel.errorMessage);
+                        }
+                        $('.toast').toast('show');
+                    }
+                });
             });
         });
 
-</script>
+    </script>
 }
