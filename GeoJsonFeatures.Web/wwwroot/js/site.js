@@ -37,3 +37,11 @@ function addFeaturesIntoTableRows(features, geoJsonDataTable) {
         ]).draw(false);
     });
 }
+
+$(document).ajaxStart(function () {
+    $(".ajax-loader").show();
+});
+
+$(document).ajaxStop(function () {
+    $(".ajax-loader").hide();
+});
