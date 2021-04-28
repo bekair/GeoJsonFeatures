@@ -115,3 +115,9 @@ input.input-validation-error {
     background-color: #dc3545 !important;
     color: white;
 }
+
+/*Map
+--------------------------*/
+.map-div {
+    margin-top:30px !important;
+}

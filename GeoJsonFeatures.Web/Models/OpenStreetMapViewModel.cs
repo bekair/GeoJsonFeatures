@@ -27,7 +27,7 @@ namespace GeoJsonFeatures.Web.Models
 
         [Required(ErrorMessage = "{0} field is required.")]
         [Range(-90, 90, ErrorMessage = "{0} field must be between {1} and {2}.")]
-        [DisplayName("Max. Longitude (northernmost)")]
+        [DisplayName("Max. Latitude (northernmost)")]
         public double? MaximumLatitude { get; set; }
 
         public ToastrViewModel ToastrViewModel { get; set; }

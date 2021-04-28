@@ -7,10 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.1" />
     <PackageReference Include="coverlet.collector" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeoJsonFeatures.WebAPI\GeoJsonFeatures.WebAPI.csproj" />
+    <ProjectReference Include="..\GeoJsonFeatures.Web\GeoJsonFeatures.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="JsonTestFiles\SearchByCoordinateResponse_33,01_88,01_33,02_88,02.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlTestFiles\ApiOsmDataResponse_10,001_12,001_10,002_12,002.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlTestFiles\ApiOsmDataResponse_88,01_33,01_88,02_33,02.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

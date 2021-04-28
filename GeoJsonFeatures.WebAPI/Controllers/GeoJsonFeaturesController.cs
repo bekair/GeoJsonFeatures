@@ -25,7 +25,7 @@ namespace GeoJsonFeatures.WebAPI.Controllers
         public async Task<ApiResponseModel<XDocument>> GetOsmDataByBbox([FromBody] BoundingBox boundingBox)
         {
             HttpClient client = _httpClientFactory.CreateClient(_config["MapApiName"]);
-            string url = $"{client.BaseAddress}map?bbox={boundingBox.MinimumLongitude},{boundingBox.MinimumLatitude},{boundingBox.MaximumLongitude},{boundingBox.MaximumLatitude}";
+            string url = $"{client.BaseAddress}/map?bbox={boundingBox.MinimumLongitude},{boundingBox.MinimumLatitude},{boundingBox.MaximumLongitude},{boundingBox.MaximumLatitude}";
 
             using HttpResponseMessage responseMessage = await client.GetAsync(url);
             ContentResult result = Content(await responseMessage.Content.ReadAsStringAsync(), "text/xml");

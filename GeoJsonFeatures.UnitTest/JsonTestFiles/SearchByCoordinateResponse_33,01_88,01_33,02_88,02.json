@@ -1,0 +1,23 @@
+{
+  "result": {
+    "?xml": {
+      "@version": "1.0",
+      "@encoding": "UTF-8"
+    },
+    "osm": {
+      "@version": "0.6",
+      "@generator": "CGImap 0.8.3 (2983143 spike-06.openstreetmap.org)",
+      "@copyright": "OpenStreetMap and contributors",
+      "@attribution": "http://www.openstreetmap.org/copyright",
+      "@license": "http://opendatacommons.org/licenses/odbl/1-0/",
+      "bounds": {
+        "@minlat": "33.0100000",
+        "@minlon": "88.0100000",
+        "@maxlat": "33.0200000",
+        "@maxlon": "88.0200000"
+      }
+    }
+  },
+  "statusCode": 200,
+  "message": null
+}

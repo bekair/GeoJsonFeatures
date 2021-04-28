@@ -36,8 +36,8 @@ namespace GeoJsonFeatures.Web.Controllers
             if (ModelState.IsValid)
             {
                 HttpClient client = _httpClientFactory.CreateClient(_config["MapApiName"]);
-                string url = $"{client.BaseAddress}GeoJsonFeatures/GetOsmDataByBbox";
-                var request = new HttpRequestMessage
+                string url = $"{client.BaseAddress}/GeoJsonFeatures/GetOsmDataByBbox";
+                HttpRequestMessage request = new()
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri(url),
