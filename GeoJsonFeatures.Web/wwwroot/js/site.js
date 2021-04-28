@@ -17,6 +17,8 @@ function removeAllValidations() {
 }
 
 function addFeaturesIntoTableRows(features, geoJsonDataTable) {
+    geoJsonDataTable.clear();
+    
     features.forEach(function (feature) {
         var featureGeometry = feature.geometry;
         var featureProperties = feature.properties;
